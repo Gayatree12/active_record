@@ -3,8 +3,8 @@
    User: gt86
 **/
 //turn on debugging messages
-//ini_set('display_errors', 'On');
-//error_reporting(E_ERROR|E_PARSE);
+ini_set('display_errors', 'On');
+error_reporting(E_ERROR|E_PARSE);
 //constants
 define('DATABASE','gt86');
 define('USERNAME','gt86');
@@ -28,7 +28,7 @@ class dbConn{
     }
     
     public static function getConnection() {
-        //new connection creation if there is no existing connection
+        //new connection created if there is no existing connection
         if (!self::$db) {
             //new connection object
             new dbConn();
@@ -156,15 +156,18 @@ class todo extends model {
     return $tableName;
     }
 }
+/********************Accounts Table********************************/
+echo '<h1><u>Accounts Table</u></h1>';
+/********************Search for all records in accounts table***********************/
+echo '<h2>1. Search for all records in Accounts Table</h2>';
+echo '<h3>Display All records:</h3>';
 
-echo "<h1>Accounts Table</h1>";
-echo "<h2>Search for all records in Accounts Table</h2>";
 $records = accounts::findAll();
  //using html table to display records  
-  $html = '<table border = 3><tbody>'; 
+  $html = '<table border = 1>'; 
   $html .= '<tr>'; //table row
     foreach($records[0] as $key=>$value) {
-            $html .= '<th>' . htmlspecialchars($key) . '</th>';
+            $html .= '<th>' . htmlspecialchars($key) . '</th>'; //table head
         }     
     $html .= '</tr>';
     
@@ -172,41 +175,42 @@ $records = accounts::findAll();
         $html .= '<tr>';
         
         foreach($value as $key2=>$value2) {
-            $html .= '<td>' . htmlspecialchars($value2) . '<br>' . '</td>';
+            $html .= '<td>' . htmlspecialchars($value2) . '<br>' . '</td>'; //table data
         }
         $html .= '</tr>';           
     }
-    $html .= '</tbody></table>';
-    print_r($html);
-  
-    echo "<h2>Search account table by unique id</h2>";
-   $record = accounts::findOne(11);
-  
-  $html = '<table border = 3><tbody>';
-  $html .= '<tr>';
+    $html .= '</table>';
+    print_r($html); //print html table
+ 
+/****************Search a record by its unique id in accounts table*******************/  
+    echo '<h2>2. Search table by unique id</h2>';
+    echo '<h3>Search by id: 11</h3>';
     
-    foreach($record[0]as $key=>$value)
-        {
-            $html .= '<th>' . htmlspecialchars($key) . '</th>';
+    $record = accounts::findOne(11);
+  //display contents in html table
+    $html = '<table border = 1>';
+    $html .= '<tr>';  //table row
+    
+    foreach($record[0]as $key=>$value) {
+            $html .= '<th>' . htmlspecialchars($key) . '</th>';  //table head
         }
        
     $html .= '</tr>';   
     
-    foreach($record as $key=>$value)
-    {
+    foreach($record as $key=>$value) {
        $html .= '<tr>';
         
-       foreach($value as $key2=>$value2)
-        {
-            $html .= '<td>' . htmlspecialchars($value2) . '<br></td>';
-        }
+       foreach($value as $key2=>$value2) {
+            $html .= '<td>' . htmlspecialchars($value2) . '<br></td>';  //table data
+        } 
         $html .= '</tr>';          
     }
-    $html .= '</tbody></table>';
-    
-    print_r($html);
+    $html .= '</table>';  
+    print_r($html);  //print html table
 
-echo "<h2>Insert One Record in accounts table</h2>";
+/***********************Insert records into accounts table*************************/
+echo '<h2>3. Insert records into table</h2>';
+echo '<h3>Insert new record: gaya123@njit.edu, gaya, tree, 889-000-1111, 1990-07-09, female, 6555</h3>';
 $record = new account();
 $record->email="gaya123@njit.edu";
 $record->fname="gaya";
@@ -217,7 +221,9 @@ $record->gender="female";
 $record->password="6555";
 $record->save(); //saving the inserted record
 $records = accounts::findAll(); //finding all the records of accounts table
-$html = '<table border = 3><tbody>';
+
+//display records in html table
+$html = '<table border = 1>';
 $html .= '<tr>';
     foreach($records[0] as $key=>$value) {
             $html .= '<th>' . htmlspecialchars($key) . '</th>';
@@ -233,23 +239,22 @@ $html .= '<tr>';
         }
         $html .= '</tr>';           
     }
-    $html .= '</tbody></table>';
-echo "<h3>After Inserting a record in table</h3>";
-print_r($html);
-//delete record from todos 
-echo "<h2>Delete One Record from the table</h2>";
-$record= new account();
-$id=6;
-$record->delete($id);
-echo '<h3>Record with id: '.$id.' is deleted</h3>';
+    $html .= '</table>';
+    print_r($html);
+    /*************************Delete records from accounts table*****************************/ 
+    echo '<h2>4. Delete One Record from the accounts table</h2>';
+    echo '<h3>Delete record: 9<h3>';
 
-$record = accounts::findAll();
-
-$html = '<table border = 5><tbody>';
-$html .= '<tr>';
+    $record = new account();
+    $id = 9;
+    $record->delete($id);
+    $record = accounts::findAll();
+    //display records in html table
+    $html = '<table border = 1>';
+    $html .= '<tr>';  //table row
     
     foreach($record[0] as $key=>$value) {
-            $html .= '<th>' . htmlspecialchars($key) . '</th>';
+            $html .= '<th>' . htmlspecialchars($key) . '</th>';  //tab;e head
         }
        
     $html .= '</tr>';
@@ -258,28 +263,27 @@ $html .= '<tr>';
         $html .= '<tr>';
         
         foreach($value as $key2=>$value2) {
-            $html .= '<td>' . htmlspecialchars($value2) . '<br></td>';
+            $html .= '<td>' . htmlspecialchars($value2) . '<br></td>';  //table data
         }
         $html .= '</tr>';      
     }
-    $html .= '</tbody></table>';
-echo "<h3>After Deleting</h3>";
-print_r($html);
-//updating a record in accounts table
-echo "<h2>Update One Record with id = 10</h2>";
-$id=10;
-$record = new account();
-$record->id=$id;
-$record->email="new@gmail.com";
-$record->fname="rose";
-$record->lname="mary";
-$record->gender="female";
-$record->save();
-$record = accounts::findAll();
-echo "<h3>Record update with id: ".$id."</h3>";
+    $html .= '</table>';
+    print_r($html);
+/*********************Updating a record in accounts table************************/
+    echo '<h2>5. Update a record in table </h2>';
+    echo '<h3>Update record: 10</h3>';
+    $id=10;
+    $record = new account();
+    $record->id=$id;
+    $record->email="new@gmail.com";
+    $record->fname="rose";
+    $record->lname="mary";
+    $record->gender="female";
+    $record->save();
+    $record = accounts::findAll();
         
-$html = '<table border = 3><tbody>'; 
-$html .= '<tr>';
+    $html = '<table border = 1>'; 
+    $html .= '<tr>';
     
     foreach($record[0] as $key=>$value) {
             $html .= '<th>' . htmlspecialchars($key) . '</th>';
@@ -294,16 +298,19 @@ $html .= '<tr>';
         }
         $html .= '</tr>';            
     }
-    $html .= '</tbody></table>';
- 
- print_r($html);
+    $html .= '</table>';
+    print_r($html);
+    echo '<hr>';  //horizontal rule
+/**************************************Todos Table*****************************************/
+    echo '<h1><u>Todos Table</u></h1>';
 
- echo"<h1>Todos Table</h1>";
- echo "<h2>Search for all records in todos table</h2>";
- $records = todos::findAll();
+/*****************Search all records in Todos table**********************************/
+    echo '<h2>1. Search for all records in todos table</h2>';
+    echo '<h3>Display all records:</h3>';
+    $records = todos::findAll();
  //displaying records in html table  
-  $html = '<table border = 3><tbody>';
-  $html .= '<tr>'; //table row
+    $html = '<table border = 1>';
+    $html .= '<tr>'; //table row
     foreach($records[0] as $key=>$value) {
             $html .= '<th>' . htmlspecialchars($key) . '</th>';
         }     
@@ -317,14 +324,14 @@ $html .= '<tr>';
         }
         $html .= '</tr>';      
     }
-    $html .= '</tbody></table>';
+    $html .= '</table>';
     print_r($html);
-//searching a record by its unique id
-    echo "<h2>Search by unique id</h2>";
-    echo "<h3>Searching a record by its unique id 2</h3>";
-  $record = todos::findOne(2);  
-  $html = '<table border = 3><tbody>';
-  $html .= '<tr>';
+/*************************Searching a record by its unique id in todos table***************************/
+    echo '<h2>2. Search by unique id</h2>';
+    echo '<h3>Search a record by id: 2</h3>';
+    $record = todos::findOne(2);  
+    $html = '<table border = 1>';
+    $html .= '<tr>';
     
     foreach($record[0]as $key=>$value) {
             $html .= '<th>' . htmlspecialchars($key) . '</th>';
@@ -340,30 +347,30 @@ $html .= '<tr>';
         }
         $html .= '</tr>';     
     }
-    $html .= '</tbody></table>';    
+    $html .= '</table>';    
     print_r($html);
-//insert a record in todos table
-   echo "<h2>Insert One Record in table</h2>";
-        $record = new todo();
-        $record->owneremail="gt@njit.edu";
-        $record->ownerid=35;
-        $record->createddate="10-07-2017";
-        $record->duedate="09-14-2017";
-        $record->message="Record Created";
-        $record->isdone=1;
-        $record->save(); //saving record
-        $records = todos::findAll();
-        echo"<h2>After Inserting a record in table</h2>";
+/*********************Insert a record in todos table************************/
+    echo '<h2>3. Insert Records in Todos table</h2>';
+    echo '<h3>Insert new record: gt@njit.edu, 35, 10-07-2017, 09-14-2017, Record Created, 1</h3>';
+    $record = new todo();
+    $record->owneremail="gt@njit.edu";
+    $record->ownerid=35;
+    $record->createddate="10-07-2017";
+    $record->duedate="09-14-2017";
+    $record->message="Record Created";
+    $record->isdone=1;
+    $record->save(); //saving record
+    $records = todos::findAll();
  
-     $html = '<table border = 3><tbody>';
-     $html .= '<tr>';
-      foreach($records[0] as $key=>$value) {
-            $html .= '<th>' . htmlspecialchars($key) . '</th>';
-        }       
-    $html .= '</tr>';
+    $html = '<table border = 1>';
+    $html .= '<tr>';
     
-    foreach($records as $key=>$value)
-    {
+    foreach($records[0] as $key=>$value) {
+        $html .= '<th>' . htmlspecialchars($key) . '</th>';
+        }       
+        $html .= '</tr>';
+    
+    foreach($records as $key=>$value) {
         $html .= '<tr>';
         
         foreach($value as $key2=>$value2) {
@@ -371,58 +378,52 @@ $html .= '<tr>';
         }
         $html .= '</tr>';           
     }
-    $html .= '</tbody></table>';
-
-print_r($html);
-//delete record from todos table
-echo "<h2>Delete one record from table</h2>";
-$record= new todo();
-$id=1;
-$record->delete($id);
-echo '<h3>Record with id: '.$id.' is deleted</h3>';
-$record = todos::findAll();
-$html = '<table border = 3><tbody>';  
-$html .= '<tr>';
+    $html .= '</table>';
+    print_r($html);
+/***************Delete record from todos table****************/
+    echo '<h2>4. Delete one record from table</h2>';
+    echo '<h3>Delete record: 1</h3>';
+    $record= new todo();
+    $id=1;
+    $record->delete($id);
+    $record = todos::findAll();
+    $html = '<table border = 1>';  
+    $html .= '<tr>';
     
-    foreach($record[0] as $key=>$value)
-        {
+    foreach($record[0] as $key=>$value) {
             $html .= '<th>' . htmlspecialchars($key) . '</th>';
         }
        
     $html .= '</tr>';
     
-    foreach($record as $key=>$value)
-    {
+    foreach($record as $key=>$value) {
         $html .= '<tr>';
         
-        foreach($value as $key2=>$value2)
-        {
+        foreach($value as $key2=>$value2) {
             $html .= '<td>' . htmlspecialchars($value2) . '<br></td>';
         }
         $html .= '</tr>';   
     }
     
-    $html .= '</tbody></table>';
-echo "<h3>After Deleting a record from table</h3>";
-print_r($html);
-
-echo "<h2>Update One Record in table</h2>";
-$id=5;
-$record = new todo();
-$record->id=$id;
-$record->owneremail="gt@gmail.com";
-$record->ownerid="87";
-$record->createddate="2017-09-01 00:00:00";
-$record->duedate="2017-07-08 00:00:00";
-$record->message="Updated";
-$record->isdone="1";
-$record->save();
-$record = todos::findAll();
-echo "<h3>Record update with id: ".$id."</h3>";
+    $html .= '</table>';
+    print_r($html);
+/*******************Updating a record in todos table**********************/
+    echo '<h2>5. Update One Record in table</h2>';
+    echo '<h3>Update a record with id: 5</h3>';
+    $id=5;
+    $record = new todo();
+    $record->id=$id;
+    $record->owneremail="gt@gmail.com";
+    $record->ownerid="87";
+    $record->createddate="2017-09-01 00:00:00";
+    $record->duedate="2017-07-08 00:00:00";
+    $record->message="Updated";
+    $record->isdone="1";
+    $record->save();
+    $record = todos::findAll();
         
-$html = '<table border = 3><tbody>';
-  
-  $html .= '<tr>';
+    $html = '<table border = 1>';  
+    $html .= '<tr>';
     
     foreach($record[0] as $key=>$value) {
             $html .= '<th>' . htmlspecialchars($key) . '</th>';
@@ -438,7 +439,6 @@ $html = '<table border = 3><tbody>';
         }
         $html .= '</tr>';            
     }
-    $html .= '</tbody></table>';
- 
- print_r($html);
+    $html .= '</table>';
+    print_r($html);
 ?>
